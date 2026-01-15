@@ -45,7 +45,7 @@
         /* --- Input Section --- */
         .controls-wrapper {
             width: 100%;
-            max-width: 600px; /* Limits width on desktop */
+            max-width: 600px;
             margin-bottom: 25px;
             display: flex;
             flex-direction: column;
@@ -87,7 +87,7 @@
             cursor: pointer;
             transition: background-color 0.2s;
             color: white;
-            height: 44px; /* Match input height */
+            height: 44px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -104,7 +104,7 @@
         .support-link {
             text-align: center;
             width: 100%;
-            background-color: #248046; /* Discord Green */
+            background-color: #248046;
             color: white;
         }
         .support-link:hover { background-color: #1a6334; }
@@ -118,8 +118,9 @@
             overflow: hidden;
             box-shadow: 0 8px 16px rgba(0,0,0,0.24);
             position: relative;
-            display: none; /* Hidden initially */
+            display: none;
             animation: slideUp 0.3s ease-out;
+            padding-bottom: 10px; /* Slight padding at bottom */
         }
 
         @keyframes slideUp {
@@ -130,7 +131,7 @@
         /* Banner */
         .banner {
             height: 210px;
-            background-color: var(--accent); /* Fallback */
+            background-color: var(--accent);
             background-size: cover;
             background-position: center;
             position: relative;
@@ -145,13 +146,13 @@
 
         .avatar-wrapper {
             position: absolute;
-            top: -70px; /* Pulls avatar up into banner */
+            top: -70px;
             left: 16px;
             width: 132px;
             height: 132px;
             border-radius: 50%;
-            background-color: var(--bg-card); /* Border illusion */
-            padding: 6px; /* Width of the 'border' */
+            background-color: var(--bg-card);
+            padding: 6px;
             z-index: 10;
         }
 
@@ -161,16 +162,21 @@
             border-radius: 50%;
             object-fit: cover;
             background-color: var(--bg-primary);
+            position: relative;
+            z-index: 10;
         }
 
+        /* Decoration Fix: Centered perfectly over the avatar */
         .decoration {
             position: absolute;
-            top: -24%; 
-            left: -24%; 
-            width: 148%;
-            height: 148%;
+            top: 50%;
+            left: 50%;
+            width: 122%; /* 122% creates the perfect frame effect */
+            height: 122%;
+            transform: translate(-50%, -50%); /* Centers element exactly */
             pointer-events: none;
-            z-index: 11;
+            z-index: 11; /* Above avatar */
+            display: none;
         }
 
         .status-dot {
@@ -203,14 +209,12 @@
             justify-content: center;
             border-radius: 4px;
         }
-        .badge-icon img { width: 100%; height: 100%; }
-        /* FontAwesome fallbacks for badges */
         .badge-icon i { font-size: 18px; }
 
         /* User Details */
         .user-content {
-            background-color: var(--bg-card); /* Inner body */
-            margin-top: 50px; /* Space for avatar */
+            background-color: var(--bg-card);
+            margin-top: 50px;
             border-radius: 8px;
         }
 
@@ -291,7 +295,7 @@
         /* Activity (Rich Presence) */
         .activity-box {
             margin-top: 12px;
-            background-color: var(--bg-primary); /* Slightly lighter than card */
+            background-color: var(--bg-primary);
             padding: 10px;
             border-radius: 5px;
             display: flex;
@@ -299,16 +303,17 @@
             align-items: center;
         }
 
-        .activity-img {
-            width: 60px;
-            height: 60px;
-            border-radius: 8px;
-            background-color: #000;
-            object-fit: cover;
-        }
-
         .activity-text h4 { margin: 0; font-size: 14px; color: var(--header-primary); }
         .activity-text p { margin: 2px 0 0; font-size: 13px; color: var(--header-secondary); }
+
+        /* Developer Credit */
+        .dev-credit {
+            margin-top: 20px;
+            color: var(--text-muted);
+            font-size: 12px;
+            text-align: center;
+            opacity: 0.7;
+        }
 
         /* Loading Spinner */
         .spinner {
@@ -337,23 +342,16 @@
 
         /* --- MOBILE OPTIMIZATION --- */
         @media (max-width: 480px) {
-            body {
-                padding: 10px;
-                background-color: #1E1F22; /* Full dark bg on mobile like app */
-            }
-
+            body { padding: 10px; background-color: #1E1F22; }
             .controls-wrapper { width: 100%; }
-
-            .banner { height: 120px; } /* Smaller banner on mobile */
-
+            .banner { height: 120px; }
             .avatar-wrapper {
                 width: 90px;
                 height: 90px;
-                top: -45px; /* Adjust overlap */
+                top: -45px;
                 left: 16px;
                 padding: 5px;
             }
-
             .status-dot {
                 width: 22px;
                 height: 22px;
@@ -361,14 +359,9 @@
                 bottom: 0;
                 right: 5px;
             }
-
             .global-name { font-size: 18px; }
-            .user-content { margin-top: 35px; } /* Less margin needed */
-            
-            .badges {
-                min-height: 30px;
-                padding-top: 8px;
-            }
+            .user-content { margin-top: 35px; }
+            .badges { min-height: 30px; padding-top: 8px; }
         }
     </style>
 </head>
@@ -403,14 +396,13 @@
             <!-- Avatar -->
             <div class="avatar-wrapper">
                 <img id="avatar" class="avatar" src="" alt="">
-                <img id="decoration" class="decoration" src="" alt="" style="display:none;">
+                <!-- Decoration centered via CSS transform -->
+                <img id="decoration" class="decoration" src="" alt="">
                 <div id="statusDot" class="status-dot"></div>
             </div>
 
             <!-- Badges -->
-            <div id="badges" class="badges">
-                <!-- Injected via JS -->
-            </div>
+            <div id="badges" class="badges"></div>
 
             <!-- Names Block -->
             <div class="user-content">
@@ -445,6 +437,11 @@
                 </div>
             </div>
         </div>
+    </div>
+
+    <!-- Developer Credit -->
+    <div class="dev-credit">
+        Developer: <span style="color: var(--accent); font-weight: bold;">xgg.2</span>
     </div>
 
     <script>
@@ -581,7 +578,6 @@
                     hasActs = true;
                     let iconHtml = '<div style="width:60px;height:60px;background:#5865F2;border-radius:8px;display:flex;justify-content:center;align-items:center;"><i class="fas fa-gamepad" style="color:white;font-size:24px;"></i></div>';
                     
-                    // Simple logic for Spotify or known images would go here, using generic for now to keep code clean
                     if(act.name === 'Spotify') {
                          iconHtml = '<img src="https://upload.wikimedia.org/wikipedia/commons/1/19/Spotify_logo_without_text.svg" style="width:60px;height:60px;background:#000;padding:8px;border-radius:8px;">';
                     }
@@ -616,11 +612,11 @@
             alert("تم نسخ الآيدي: " + id);
         }
 
-        // Enter key support
         document.getElementById('userIdInput').addEventListener('keypress', function (e) {
             if (e.key === 'Enter') fetchUser();
         });
     </script>
 </body>
 </html>
+
 
